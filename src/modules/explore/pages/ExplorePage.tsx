@@ -1,7 +1,6 @@
-﻿import { useMemo, useState } from 'react';
+﻿import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { List, Map, Search, SlidersHorizontal, X } from 'lucide-react';
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import { Search, SlidersHorizontal, X } from 'lucide-react';
 import L from 'leaflet';
 import { PageWrapper } from '@/shared/components/layout/PageWrapper';
 import { StarRating } from '@/shared/components/ui/StarRating';
@@ -10,13 +9,26 @@ import { categories, mockPlaces } from '@/shared/lib/mockData';
 import { cn } from '@/lib/utils';
 import 'leaflet/dist/leaflet.css';
 
-function createMarkerIcon(score: number) {
-  const color = score >= 80 ? '#16a34a' : score >= 50 ? '#f59e0b' : '#9ca3af';
+function markerColor(score: number) {
+  if (score >= 80) return '#16a34a';
+  if (score >= 50) return '#f59e0b';
+  return '#9ca3af';
+}
+
+function markerIcon(imageUrl: string, score: number) {
   return L.divIcon({
-    html: `<div style="width:28px;height:28px;border-radius:50%;background:${color};border:3px solid white;box-shadow:0 2px 6px rgba(0,0,0,0.3);"></div>`,
+    html: `
+      <div style="position:relative;width:40px;height:48px;display:flex;align-items:flex-start;justify-content:center;">
+        <div style="position:absolute;top:0;width:34px;height:34px;border-radius:9999px;overflow:hidden;border:3px solid ${markerColor(score)};box-shadow:0 2px 8px rgba(0,0,0,0.35);background:#fff;">
+          <img src="${imageUrl}" alt="" style="width:100%;height:100%;object-fit:cover;display:block;" />
+        </div>
+        <div style="position:absolute;top:30px;width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-top:12px solid ${markerColor(score)};"></div>
+      </div>
+    `,
     className: '',
-    iconSize: [28, 28],
-    iconAnchor: [14, 14],
+    iconSize: [40, 48],
+    iconAnchor: [20, 42],
+    popupAnchor: [0, -36],
   });
 }
 
@@ -24,9 +36,14 @@ export default function ExplorePage() {
   const [activeCategory, setActiveCategory] = useState('all');
   const [search, setSearch] = useState('');
   const [showFilters, setShowFilters] = useState(false);
-  const [viewMode, setViewMode] = useState<'map' | 'list'>('list');
   const [difficulty, setDifficulty] = useState<'all' | 'easy' | 'medium' | 'hard'>('all');
   const [sortBy, setSortBy] = useState<'match' | 'rating' | 'priceAsc' | 'duration'>('match');
+
+  const mapContainerRef = useRef<HTMLDivElement | null>(null);
+  const mapRef = useRef<L.Map | null>(null);
+  const markersLayerRef = useRef<L.LayerGroup | null>(null);
+  const [mapReady, setMapReady] = useState(false);
+  const [mapError, setMapError] = useState<string | null>(null);
 
   const maxPrice = Math.max(...mockPlaces.map((p) => p.price));
   const [priceLimit, setPriceLimit] = useState(maxPrice);
@@ -56,6 +73,73 @@ export default function ExplorePage() {
   }, [activeCategory, difficulty, priceLimit, search, sortBy]);
 
   const hasActiveFilters = activeCategory !== 'all' || search.length > 0 || difficulty !== 'all' || priceLimit !== maxPrice;
+
+  useEffect(() => {
+    if (!mapContainerRef.current || mapRef.current) return;
+
+    try {
+      const map = L.map(mapContainerRef.current, {
+        center: [30.1, -9.3],
+        zoom: 9,
+        scrollWheelZoom: false,
+      });
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
+        maxZoom: 19,
+      }).addTo(map);
+
+      mapRef.current = map;
+      markersLayerRef.current = L.layerGroup().addTo(map);
+      setMapReady(true);
+      setMapError(null);
+
+      const invalidate = () => map.invalidateSize();
+      const timeoutId = window.setTimeout(invalidate, 120);
+      window.addEventListener('resize', invalidate);
+
+      return () => {
+        window.clearTimeout(timeoutId);
+        window.removeEventListener('resize', invalidate);
+        map.remove();
+        mapRef.current = null;
+        markersLayerRef.current = null;
+      };
+    } catch {
+      setMapError('Impossible de charger la carte');
+      setMapReady(false);
+      return;
+    }
+  }, []);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    const layer = markersLayerRef.current;
+    if (!map || !layer) return;
+
+    layer.clearLayers();
+
+    if (filtered.length === 0) return;
+
+    const bounds: L.LatLngExpression[] = [];
+
+    filtered.forEach((place) => {
+      const marker = L.marker([place.lat, place.lng], { icon: markerIcon(place.image, place.matchScore) });
+      marker.bindPopup(
+        `<div style="min-width:180px"><div style="font-weight:700;margin-bottom:4px">${place.name}</div><div style="font-size:12px;color:#666">${place.region}</div><a href="/place/${place.id}" style="display:inline-block;margin-top:8px;font-size:12px;color:#0f766e;font-weight:600">Voir le spot</a></div>`
+      );
+      marker.addTo(layer);
+      bounds.push([place.lat, place.lng]);
+    });
+
+    if (bounds.length === 1) {
+      map.setView(bounds[0], 11);
+    } else {
+      map.fitBounds(bounds, { padding: [30, 30] });
+    }
+
+    window.setTimeout(() => map.invalidateSize(), 0);
+  }, [filtered]);
 
   function resetFilters() {
     setActiveCategory('all');
@@ -121,31 +205,6 @@ export default function ExplorePage() {
           </div>
 
           <div className="grid grid-cols-2 gap-2">
-            <button
-              type="button"
-              onClick={() => setViewMode('map')}
-              className={cn(
-                'inline-flex items-center justify-center gap-1.5 rounded-lg border px-2 py-2 text-xs font-semibold',
-                viewMode === 'map' ? 'border-primary bg-primary-light text-primary' : 'border-border'
-              )}
-            >
-              <Map className="h-3.5 w-3.5" />
-              Carte
-            </button>
-            <button
-              type="button"
-              onClick={() => setViewMode('list')}
-              className={cn(
-                'inline-flex items-center justify-center gap-1.5 rounded-lg border px-2 py-2 text-xs font-semibold',
-                viewMode === 'list' ? 'border-primary bg-primary-light text-primary' : 'border-border'
-              )}
-            >
-              <List className="h-3.5 w-3.5" />
-              Liste
-            </button>
-          </div>
-
-          <div className="mt-3 grid grid-cols-2 gap-2">
             <select
               value={difficulty}
               onChange={(e) => setDifficulty(e.target.value as 'all' | 'easy' | 'medium' | 'hard')}
@@ -197,27 +256,25 @@ export default function ExplorePage() {
         </div>
       </div>
 
-      {viewMode === 'map' && (
-        <div className="h-[36vh] w-full">
-          <MapContainer center={[30.1, -9.3]} zoom={9} scrollWheelZoom={false} className="h-full w-full">
-            <TileLayer
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-            />
-            {filtered.map((place) => (
-              <Marker key={place.id} position={[place.lat, place.lng]} icon={createMarkerIcon(place.matchScore)}>
-                <Popup>
-                  <Link to={`/place/${place.id}`} className="block w-48">
-                    <img src={place.image} alt={place.name} className="h-24 w-full rounded-lg object-cover" />
-                    <div className="mt-1.5 text-sm font-semibold">{place.name}</div>
-                    <div className="text-xs text-muted-foreground">{place.region}</div>
-                  </Link>
-                </Popup>
-              </Marker>
-            ))}
-          </MapContainer>
+      <div className="px-4 pb-2">
+        <div className="mb-2 flex items-center justify-between text-xs text-muted-foreground">
+          <span>Carte interactive des spots</span>
+          <span>Vert: meilleur match</span>
         </div>
-      )}
+        <div className="relative h-[36vh] w-full overflow-hidden rounded-2xl border border-border">
+          <div ref={mapContainerRef} className="h-full w-full" />
+          {!mapReady && !mapError && (
+            <div className="absolute inset-0 flex items-center justify-center bg-background/80 text-xs text-muted-foreground">
+              Chargement de la carte...
+            </div>
+          )}
+          {mapError && (
+            <div className="absolute inset-0 flex items-center justify-center bg-background/90 text-xs text-destructive">
+              {mapError}
+            </div>
+          )}
+        </div>
+      </div>
 
       <div className="space-y-3 px-4 py-4">
         {filtered.length > 0 ? (
