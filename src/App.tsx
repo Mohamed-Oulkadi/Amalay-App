@@ -15,6 +15,7 @@ import LoginPage from "@/modules/auth/pages/LoginPage";
 import RegisterPage from "@/modules/auth/pages/RegisterPage";
 import GuideRegisterPage from "@/modules/auth/pages/GuideRegisterPage";
 import GuideDashboardPage from "@/modules/guide/pages/GuideDashboardPage";
+import GuideDetailPage from "@/modules/guide/pages/GuideDetailPage";
 import CommunityFeedPage from "@/modules/community/pages/CommunityFeedPage";
 import BookingPage from "@/modules/booking/pages/BookingPage";
 import BookingsPage from "@/modules/booking/pages/BookingsPage";
@@ -42,6 +43,7 @@ const App = () => (
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/guide/register" element={<GuideRegisterPage />} />
           <Route path="/guide/dashboard" element={<GuideDashboardPage />} />
+          <Route path="/guide/:id" element={<GuideDetailPage />} />
           <Route path="/community" element={<CommunityFeedPage />} />
           <Route path="/booking/:id" element={<BookingPage />} />
           <Route path="/bookings" element={<BookingsPage />} />

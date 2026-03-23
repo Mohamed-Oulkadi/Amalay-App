@@ -1,6 +1,6 @@
 ﻿import { FormEvent, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Heart, MessageCircle, Send } from 'lucide-react';
+import { ArrowBigDown, ArrowBigUp, MessageCircle, Send } from 'lucide-react';
 import { PageWrapper } from '@/shared/components/layout/PageWrapper';
 import { mockPosts } from '@/shared/lib/mockData';
 import { useAuthStore } from '@/store/authStore';
@@ -26,8 +26,8 @@ const initialCommentsByPost: Record<string, CommentItem[]> = {
 export default function CommunityFeedPage() {
   const currentUser = useAuthStore((s) => s.user);
 
-  const [likedByPost, setLikedByPost] = useState<Record<string, boolean>>({});
-  const [likesByPost, setLikesByPost] = useState<Record<string, number>>(() =>
+  const [myVoteByPost, setMyVoteByPost] = useState<Record<string, -1 | 0 | 1>>({});
+  const [scoreByPost, setScoreByPost] = useState<Record<string, number>>(() =>
     Object.fromEntries(mockPosts.map((post) => [post.id, post.likesCount]))
   );
 
@@ -44,16 +44,18 @@ export default function CommunityFeedPage() {
     [commentsByPost]
   );
 
-  function toggleLike(postId: string) {
-    setLikedByPost((prev) => {
-      const wasLiked = Boolean(prev[postId]);
+  function vote(postId: string, direction: -1 | 1) {
+    setMyVoteByPost((prev) => {
+      const previousVote = prev[postId] ?? 0;
+      const nextVote = previousVote === direction ? 0 : direction;
+      const delta = nextVote - previousVote;
 
-      setLikesByPost((likes) => ({
-        ...likes,
-        [postId]: Math.max(0, (likes[postId] ?? 0) + (wasLiked ? -1 : 1)),
+      setScoreByPost((scores) => ({
+        ...scores,
+        [postId]: (scores[postId] ?? 0) + delta,
       }));
 
-      return { ...prev, [postId]: !wasLiked };
+      return { ...prev, [postId]: nextVote };
     });
   }
 
@@ -96,7 +98,7 @@ export default function CommunityFeedPage() {
       <div className="space-y-4">
         {mockPosts.map((post, i) => {
           const postComments = commentsByPost[post.id] ?? [];
-          const isLiked = Boolean(likedByPost[post.id]);
+          const myVote = myVoteByPost[post.id] ?? 0;
           const isExpanded = Boolean(expandedComments[post.id]);
 
           return (
@@ -121,16 +123,33 @@ export default function CommunityFeedPage() {
                 <p className="text-sm leading-relaxed">{post.content}</p>
 
                 <div className="mt-3 flex items-center gap-4 border-t border-border pt-3">
-                  <button
-                    type="button"
-                    onClick={() => toggleLike(post.id)}
-                    className={cn(
-                      'flex items-center gap-1.5 text-xs transition-colors',
-                      isLiked ? 'text-destructive' : 'text-muted-foreground hover:text-destructive'
-                    )}
-                  >
-                    <Heart className={cn('h-4 w-4', isLiked && 'fill-destructive')} /> {likesByPost[post.id] ?? post.likesCount}
-                  </button>
+                  <div className="inline-flex items-center rounded-lg border border-border bg-background p-0.5">
+                    <button
+                      type="button"
+                      onClick={() => vote(post.id, 1)}
+                      className={cn(
+                        'inline-flex h-8 w-8 items-center justify-center rounded-md transition-colors',
+                        myVote === 1 ? 'bg-primary-light text-primary' : 'text-muted-foreground hover:bg-muted'
+                      )}
+                      aria-label="Upvote"
+                    >
+                      <ArrowBigUp className={cn('h-4 w-4', myVote === 1 && 'fill-primary')} />
+                    </button>
+                    <span className="min-w-10 text-center text-xs font-semibold">
+                      {scoreByPost[post.id] ?? post.likesCount}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => vote(post.id, -1)}
+                      className={cn(
+                        'inline-flex h-8 w-8 items-center justify-center rounded-md transition-colors',
+                        myVote === -1 ? 'bg-destructive/10 text-destructive' : 'text-muted-foreground hover:bg-muted'
+                      )}
+                      aria-label="Downvote"
+                    >
+                      <ArrowBigDown className={cn('h-4 w-4', myVote === -1 && 'fill-destructive')} />
+                    </button>
+                  </div>
 
                   <button
                     type="button"
