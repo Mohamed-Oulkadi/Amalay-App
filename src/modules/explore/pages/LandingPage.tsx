@@ -58,13 +58,14 @@ export default function LandingPage() {
       {/* How it works */}
       <section className="px-4 py-10">
         <h2 className="text-display text-center mb-8">Comment ça marche ?</h2>
-        <motion.div className="mx-auto max-w-lg space-y-4" variants={stagger} initial="initial" whileInView="animate" viewport={{ once: true }}>
+        <motion.div className="scrollbar-none -mx-4 flex gap-3 overflow-x-auto px-4 pb-2" variants={stagger} initial="initial" whileInView="animate" viewport={{ once: true }}>
           {[
             { icon: Users, title: 'Créez votre profil', desc: 'Répondez à 7 questions pour que notre IA comprenne vos envies.' },
             { icon: Compass, title: 'Recevez vos recommandations', desc: 'Spot + activité + guide, parfaitement adaptés à votre profil.' },
             { icon: MapPin, title: 'Réservez & explorez', desc: 'Contactez votre guide et vivez une expérience rurale unique.' },
           ].map((step, i) => (
-            <motion.div key={i} variants={fadeUp} className="flex gap-4 rounded-2xl border border-border bg-card p-4">
+            <motion.div key={i} variants={fadeUp} className="w-72 shrink-0 rounded-2xl border border-border bg-card p-4">
+              <div className="flex gap-4">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-light">
                 <step.icon className="h-5 w-5 text-primary" />
               </div>
@@ -72,6 +73,7 @@ export default function LandingPage() {
                 <div className="text-xs font-bold text-primary mb-0.5">Étape {i + 1}</div>
                 <h3 className="text-sm font-semibold">{step.title}</h3>
                 <p className="text-body mt-0.5">{step.desc}</p>
+              </div>
               </div>
             </motion.div>
           ))}
