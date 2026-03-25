@@ -25,7 +25,7 @@ function ImageCarousel({
 
   return (
     <div className="overflow-hidden rounded-xl bg-muted/50">
-      <div className="relative h-24">
+      <div className="relative h-40">
         <img src={images[index]} alt={alt} className="h-full w-full object-cover" loading="lazy" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
         <div className="absolute bottom-2 left-2 z-10 flex items-center gap-2 text-xs font-semibold text-white">
