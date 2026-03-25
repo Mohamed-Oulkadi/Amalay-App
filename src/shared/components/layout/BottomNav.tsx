@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from 'react-router-dom';
-import { Home, Map, CalendarDays, Users, User, LayoutDashboard, MapPin, GraduationCap } from 'lucide-react';
+import { Home, Map, CalendarDays, Users, User, LayoutDashboard, MapPin } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/store/authStore';
 
@@ -15,7 +15,6 @@ const guideTabs = [
   { to: '/guide/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   { to: '/guide/places', icon: MapPin, label: 'Mes Spots' },
   { to: '/guide/bookings', icon: CalendarDays, label: 'Réservations' },
-  { to: '/guide/training', icon: GraduationCap, label: 'Formation' },
   { to: '/guide/profile', icon: User, label: 'Profil' },
 ];
 

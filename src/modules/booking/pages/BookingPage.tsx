@@ -1,12 +1,52 @@
 ﻿import { FormEvent, useMemo, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, CalendarDays, Clock, MapPin, Minus, Plus, User } from 'lucide-react';
+import { ArrowLeft, CalendarDays, Clock, MapPin, Minus, Plus, User, Home, UtensilsCrossed, Activity, ChevronLeft, ChevronRight } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { PageWrapper } from '@/shared/components/layout/PageWrapper';
-import { mockGuides, mockPlaces } from '@/shared/lib/mockData';
+import { mockGuides } from '@/shared/lib/mockData';
+import { usePlacesStore } from '@/store/placesStore';
 
 const timeSlots = ['08:00', '10:00', '14:00', '16:00'];
+
+function ImageCarousel({
+  images,
+  label,
+  Icon,
+  alt,
+}: {
+  images: string[];
+  label: string;
+  Icon: typeof Home;
+  alt: string;
+}) {
+  const [index, setIndex] = useState(0);
+  const last = images.length - 1;
+  const goPrev = () => setIndex((i) => (i <= 0 ? last : i - 1));
+  const goNext = () => setIndex((i) => (i >= last ? 0 : i + 1));
+
+  return (
+    <div className="overflow-hidden rounded-xl bg-muted/50">
+      <div className="relative h-24">
+        <img src={images[index]} alt={alt} className="h-full w-full object-cover" loading="lazy" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+        <div className="absolute bottom-2 left-2 z-10 flex items-center gap-2 text-xs font-semibold text-white">
+          <Icon className="h-3.5 w-3.5" /> {label}
+        </div>
+        <div className="absolute inset-y-0 left-2 z-10 flex items-center">
+          <button type="button" onClick={goPrev} className="rounded-full bg-black/45 p-1.5 text-white backdrop-blur-sm">
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+        </div>
+        <div className="absolute inset-y-0 right-2 z-10 flex items-center">
+          <button type="button" onClick={goNext} className="rounded-full bg-black/45 p-1.5 text-white backdrop-blur-sm">
+            <ChevronRight className="h-4 w-4" />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function toInputDate(offsetDays: number) {
   const d = new Date();
@@ -18,7 +58,8 @@ export default function BookingPage() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const place = mockPlaces.find((p) => p.id === id) ?? mockPlaces[0];
+  const places = usePlacesStore((s) => s.places);
+  const place = places.find((p) => p.id === id) ?? places[0];
   const guide = mockGuides.find((g) => g.id === place.guideId) ?? mockGuides[0];
 
   const [date, setDate] = useState(toInputDate(2));
@@ -62,6 +103,36 @@ export default function BookingPage() {
               <MapPin className="h-3.5 w-3.5" /> {place.region}
             </p>
             <p className="text-xs text-muted-foreground">Guide: {guide.name}</p>
+          </div>
+        </div>
+
+        <div className="mt-4 rounded-2xl border border-border bg-card p-4">
+          <h3 className="mb-3 text-sm font-semibold">Homestay</h3>
+          <div className="grid gap-3">
+            <div>
+              <ImageCarousel images={place.homestay.houseImages} label="Maison" Icon={Home} alt={place.homestay.house} />
+              <p className="mt-2 text-sm font-semibold">{place.homestay.house}</p>
+            </div>
+            <div>
+              <ImageCarousel images={place.homestay.mealsImages} label="Repas" Icon={UtensilsCrossed} alt="Repas" />
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {place.homestay.meals.map((meal) => (
+                  <span key={meal} className="rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
+                    {meal}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div>
+              <ImageCarousel images={place.homestay.activitiesImages} label="Activites" Icon={Activity} alt="Activites" />
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {place.homestay.activities.map((activity) => (
+                  <span key={activity} className="rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-muted-foreground">
+                    {activity}
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
 

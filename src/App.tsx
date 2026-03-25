@@ -18,6 +18,7 @@ import GuideDashboardPage from "@/modules/guide/pages/GuideDashboardPage";
 import GuideDetailPage from "@/modules/guide/pages/GuideDetailPage";
 import GuideOnboardingPage from "@/modules/guide/pages/GuideOnboardingPage";
 import GuideBookingsPage from "@/modules/guide/pages/GuideBookingsPage";
+import GuidePlacesPage from "@/modules/guide/pages/GuidePlacesPage";
 import CommunityFeedPage from "@/modules/community/pages/CommunityFeedPage";
 import BookingPage from "@/modules/booking/pages/BookingPage";
 import BookingsPage from "@/modules/booking/pages/BookingsPage";
@@ -47,6 +48,7 @@ const App = () => (
           <Route path="/guide/onboarding" element={<GuideOnboardingPage />} />
           <Route path="/guide/dashboard" element={<GuideDashboardPage />} />
           <Route path="/guide/bookings" element={<GuideBookingsPage />} />
+          <Route path="/guide/places" element={<GuidePlacesPage />} />
           <Route path="/guide/:id" element={<GuideDetailPage />} />
           <Route path="/community" element={<CommunityFeedPage />} />
           <Route path="/booking/:id" element={<BookingPage />} />
