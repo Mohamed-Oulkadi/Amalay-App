@@ -24,7 +24,7 @@ export function BottomNav() {
   const role = user?.role ?? 'tourist';
 
   // Hide on auth/onboarding pages
-  const hiddenPaths = ['/login', '/register', '/guide/register', '/guide/onboarding', '/onboarding', '/booking/'];
+  const hiddenPaths = ['/login', '/register', '/guide/register', '/guide/onboarding', '/onboarding', '/booking/', '/admin'];
   if (hiddenPaths.some((p) => location.pathname.startsWith(p))) return null;
 
   const tabs = role === 'guide' ? guideTabs : touristTabs;

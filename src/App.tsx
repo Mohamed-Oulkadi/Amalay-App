@@ -25,6 +25,12 @@ import BookingsPage from "@/modules/booking/pages/BookingsPage";
 import ProfilePage from "@/modules/profile/pages/ProfilePage";
 import EventsPage from "@/modules/events/pages/EventsPage";
 import EventDetailPage from "@/modules/events/pages/EventDetailPage";
+import AdminDashboardPage from "@/modules/admin/pages/AdminDashboardPage";
+import AdminCandidaturesPage from "@/modules/admin/pages/AdminCandidaturesPage";
+import AdminEventsPage from "@/modules/admin/pages/AdminEventsPage";
+import AdminCommunityPage from "@/modules/admin/pages/AdminCommunityPage";
+import AdminVisitorsPage from "@/modules/admin/pages/AdminVisitorsPage";
+import AdminRevenuePage from "@/modules/admin/pages/AdminRevenuePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -57,6 +63,12 @@ const App = () => (
           <Route path="/guide/profile" element={<ProfilePage />} />
           <Route path="/events" element={<EventsPage />} />
           <Route path="/events/:id" element={<EventDetailPage />} />
+          <Route path="/admin" element={<AdminDashboardPage />} />
+          <Route path="/admin/candidatures" element={<AdminCandidaturesPage />} />
+          <Route path="/admin/events" element={<AdminEventsPage />} />
+          <Route path="/admin/community" element={<AdminCommunityPage />} />
+          <Route path="/admin/visitors" element={<AdminVisitorsPage />} />
+          <Route path="/admin/revenue" element={<AdminRevenuePage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <AzulChatbot />

@@ -12,6 +12,9 @@ interface NavbarProps {
 export function Navbar({ title, showBack, transparent }: NavbarProps) {
   const location = useLocation();
   const isLanding = location.pathname === '/';
+  const isAdmin = location.pathname.startsWith('/admin');
+
+  if (isAdmin) return null;
 
   return (
     <header
