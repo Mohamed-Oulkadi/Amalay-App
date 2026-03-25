@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { TrendingUp, Users, Star, MapPin, Plus, Check, X } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
 import { Button } from '@/components/ui/button';
@@ -22,6 +23,8 @@ const stagger = { animate: { transition: { staggerChildren: 0.06 } } };
 const fadeUp = { initial: { opacity: 0, y: 12 }, animate: { opacity: 1, y: 0 } };
 
 export default function GuideDashboardPage() {
+  const navigate = useNavigate();
+
   return (
     <PageWrapper className="pt-14 px-4">
       <div className="py-4">
@@ -62,7 +65,16 @@ export default function GuideDashboardPage() {
           {mockBookings.filter((b) => b.status === 'pending').map((b) => {
             const place = mockPlaces.find((p) => p.id === b.placeId);
             return (
-              <div key={b.id} className="flex items-center gap-3 rounded-2xl border border-border bg-card p-3">
+              <div
+                key={b.id}
+                role="button"
+                tabIndex={0}
+                onClick={() => navigate('/guide/bookings', { state: { focusId: b.id } })}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') navigate('/guide/bookings', { state: { focusId: b.id } });
+                }}
+                className="flex items-center gap-3 rounded-2xl border border-border bg-card p-3 text-left transition-shadow hover:shadow-sm"
+              >
                 <img src={place?.image} alt={place?.name} className="h-14 w-14 shrink-0 rounded-xl object-cover" />
                 <div className="flex-1 min-w-0">
                   <h4 className="text-sm font-semibold truncate">{place?.name}</h4>
@@ -70,10 +82,18 @@ export default function GuideDashboardPage() {
                   <p className="text-xs font-bold text-primary mt-0.5">{b.totalPrice} MAD</p>
                 </div>
                 <div className="flex gap-2">
-                  <button className="flex h-9 w-9 items-center justify-center rounded-xl bg-guide-light text-guide">
+                  <button
+                    type="button"
+                    onClick={(e) => e.stopPropagation()}
+                    className="flex h-9 w-9 items-center justify-center rounded-xl bg-guide-light text-guide"
+                  >
                     <Check className="h-4 w-4" />
                   </button>
-                  <button className="flex h-9 w-9 items-center justify-center rounded-xl bg-destructive/10 text-destructive">
+                  <button
+                    type="button"
+                    onClick={(e) => e.stopPropagation()}
+                    className="flex h-9 w-9 items-center justify-center rounded-xl bg-destructive/10 text-destructive"
+                  >
                     <X className="h-4 w-4" />
                   </button>
                 </div>

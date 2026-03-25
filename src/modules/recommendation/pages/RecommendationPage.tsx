@@ -1,11 +1,51 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Sparkles, Clock, Mountain, ArrowRight, RefreshCw } from 'lucide-react';
+import { Sparkles, Clock, Mountain, ArrowRight, RefreshCw, Home, UtensilsCrossed, Activity, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PageWrapper } from '@/shared/components/layout/PageWrapper';
 import { StarRating } from '@/shared/components/ui/StarRating';
 import { MatchBadge, CertifiedBadge } from '@/shared/components/ui/MatchBadge';
 import { mockPlaces, mockGuides } from '@/shared/lib/mockData';
+import { useState } from 'react';
+
+function ImageCarousel({
+  images,
+  label,
+  Icon,
+  alt,
+}: {
+  images: string[];
+  label: string;
+  Icon: typeof Home;
+  alt: string;
+}) {
+  const [index, setIndex] = useState(0);
+  const last = images.length - 1;
+  const goPrev = () => setIndex((i) => (i <= 0 ? last : i - 1));
+  const goNext = () => setIndex((i) => (i >= last ? 0 : i + 1));
+
+  return (
+    <div className="overflow-hidden rounded-xl bg-muted/50">
+      <div className="relative h-20">
+        <img src={images[index]} alt={alt} className="h-full w-full object-cover" loading="lazy" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+        <div className="absolute bottom-2 left-2 z-10 flex items-center gap-2 text-[11px] font-semibold text-white">
+          <Icon className="h-3.5 w-3.5" /> {label}
+        </div>
+        <div className="absolute inset-y-0 left-2 z-10 flex items-center">
+          <button type="button" onClick={goPrev} className="rounded-full bg-black/45 p-1 text-white backdrop-blur-sm">
+            <ChevronLeft className="h-3.5 w-3.5" />
+          </button>
+        </div>
+        <div className="absolute inset-y-0 right-2 z-10 flex items-center">
+          <button type="button" onClick={goNext} className="rounded-full bg-black/45 p-1 text-white backdrop-blur-sm">
+            <ChevronRight className="h-3.5 w-3.5" />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function RecommendationPage() {
   const place = mockPlaces[0]; // top match
@@ -45,6 +85,40 @@ export default function RecommendationPage() {
             <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" /> {place.duration}h</span>
             <span className="flex items-center gap-1"><Mountain className="h-3.5 w-3.5" /> {place.difficulty}</span>
             <StarRating rating={place.rating} />
+          </div>
+
+          {/* Homestay */}
+          <div className="grid gap-2 sm:grid-cols-3">
+            <div className="overflow-hidden rounded-xl bg-muted/50">
+              <ImageCarousel images={place.homestay.houseImages} label="Maison" Icon={Home} alt={place.homestay.house} />
+              <div className="p-3">
+                <p className="text-sm font-semibold">{place.homestay.house}</p>
+              </div>
+            </div>
+            <div className="overflow-hidden rounded-xl bg-muted/50">
+              <ImageCarousel images={place.homestay.mealsImages} label="Repas" Icon={UtensilsCrossed} alt="Repas" />
+              <div className="p-3">
+                <div className="flex flex-wrap gap-1.5">
+                  {place.homestay.meals.slice(0, 2).map((meal) => (
+                    <span key={meal} className="rounded-full bg-background px-2.5 py-0.5 text-[11px] font-medium text-muted-foreground">
+                      {meal}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="overflow-hidden rounded-xl bg-muted/50">
+              <ImageCarousel images={place.homestay.activitiesImages} label="Activites" Icon={Activity} alt="Activites" />
+              <div className="p-3">
+                <div className="flex flex-wrap gap-1.5">
+                  {place.homestay.activities.slice(0, 2).map((activity) => (
+                    <span key={activity} className="rounded-full bg-background px-2.5 py-0.5 text-[11px] font-medium text-muted-foreground">
+                      {activity}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Guide info */}
@@ -94,6 +168,15 @@ export default function RecommendationPage() {
                   <MatchBadge score={p.matchScore} />
                 </div>
                 <p className="text-caption">{p.region} · {p.price} MAD</p>
+                <p className="mt-1 text-[11px] text-muted-foreground truncate">Maison: {p.homestay.house}</p>
+                <div className="mt-1 flex flex-wrap gap-1.5">
+                  <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+                    {p.homestay.meals[0]}
+                  </span>
+                  <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+                    {p.homestay.activities[0]}
+                  </span>
+                </div>
               </div>
             </Link>
           ))}

@@ -61,7 +61,7 @@ export function AzulChatbot() {
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<ChatMessage[]>([initialMessage]);
 
-  const hiddenPaths = ['/login', '/register', '/guide/register', '/onboarding'];
+  const hiddenPaths = ['/login', '/register', '/guide/register', '/guide/onboarding', '/onboarding'];
   const hidden = useMemo(() => hiddenPaths.some((path) => location.pathname.startsWith(path)), [location.pathname]);
 
   if (hidden) return null;

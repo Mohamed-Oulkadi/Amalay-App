@@ -30,7 +30,7 @@ export default function LandingPage() {
           </p>
           <div className="mt-6 flex gap-3">
             <Button asChild size="lg" className="rounded-xl font-semibold shadow-lg shadow-primary/25">
-              <Link to="/onboarding">Commencer <ArrowRight className="ml-1 h-4 w-4" /></Link>
+              <Link to="/login">Commencer <ArrowRight className="ml-1 h-4 w-4" /></Link>
             </Button>
             <Button asChild variant="outline" size="lg" className="rounded-xl border-white/40 bg-white/90 font-semibold text-souss hover:bg-white">
               <Link to="/explore">Explorer</Link>
@@ -58,13 +58,13 @@ export default function LandingPage() {
       {/* How it works */}
       <section className="px-4 py-10">
         <h2 className="text-display text-center mb-8">Comment ça marche ?</h2>
-        <motion.div className="scrollbar-none -mx-4 flex gap-3 overflow-x-auto px-4 pb-2" variants={stagger} initial="initial" whileInView="animate" viewport={{ once: true }}>
+        <motion.div className="grid gap-3 sm:grid-cols-3" variants={stagger} initial="initial" whileInView="animate" viewport={{ once: true }}>
           {[
             { icon: Users, title: 'Créez votre profil', desc: 'Répondez à 7 questions pour que notre IA comprenne vos envies.' },
             { icon: Compass, title: 'Recevez vos recommandations', desc: 'Spot + activité + guide, parfaitement adaptés à votre profil.' },
             { icon: MapPin, title: 'Réservez & explorez', desc: 'Contactez votre guide et vivez une expérience rurale unique.' },
           ].map((step, i) => (
-            <motion.div key={i} variants={fadeUp} className="w-72 shrink-0 rounded-2xl border border-border bg-card p-4">
+            <motion.div key={i} variants={fadeUp} className="rounded-2xl border border-border bg-card p-4">
               <div className="flex gap-4">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-light">
                 <step.icon className="h-5 w-5 text-primary" />

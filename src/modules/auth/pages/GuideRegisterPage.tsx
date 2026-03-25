@@ -18,7 +18,7 @@ export default function GuideRegisterPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     login({ id: 'g1', name, email, role: 'guide' });
-    navigate('/guide/dashboard');
+    navigate('/guide/onboarding');
   };
 
   return (

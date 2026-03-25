@@ -6,6 +6,26 @@ export const mockPlaces = [
     image: 'https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=800',
     description: "Une cascade spectaculaire nichée dans les montagnes de l'Anti-Atlas, entourée de palmiers et d'amandiers.",
     tags: ['randonnée', 'cascade', 'nature'],
+    homestay: {
+      house: 'Maison d hotes en pise avec patio',
+      houseImages: [
+        'https://images.unsplash.com/photo-1507089947368-19c1da9775ae?w=800',
+        'https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=800',
+        'https://images.unsplash.com/photo-1449844908441-8829872d2607?w=800',
+      ],
+      meals: ['Petit dej maison', 'Tajine poulet citron', 'The a la menthe'],
+      mealsImages: [
+        'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800',
+        'https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800',
+        'https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=800',
+      ],
+      activities: ['Atelier pain', 'Balade palmeraie', 'Soiree musique locale'],
+      activitiesImages: [
+        'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800',
+        'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800',
+        'https://images.unsplash.com/photo-1489515217757-5fd1be406fef?w=800',
+      ],
+    },
     guideId: 'g1',
   },
   {
@@ -15,6 +35,26 @@ export const mockPlaces = [
     image: 'https://images.unsplash.com/photo-1539020140153-e479b8c22e70?w=800',
     description: "Plongez au cœur d'un souk amazigh authentique. Bijoux en argent, épices et artisanat local.",
     tags: ['culture', 'artisanat', 'souk'],
+    homestay: {
+      house: 'Maison traditionnelle en terre battue',
+      houseImages: [
+        'https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=800',
+        'https://images.unsplash.com/photo-1507089947368-19c1da9775ae?w=800',
+        'https://images.unsplash.com/photo-1449844908441-8829872d2607?w=800',
+      ],
+      meals: ['Couscous du vendredi', 'Harira maison', 'The aux herbes'],
+      mealsImages: [
+        'https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?w=800',
+        'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800',
+        'https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800',
+      ],
+      activities: ['Visite du souk', 'Atelier bijouterie', 'Degustation d epices'],
+      activitiesImages: [
+        'https://images.unsplash.com/photo-1489515217757-5fd1be406fef?w=800',
+        'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800',
+        'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800',
+      ],
+    },
     guideId: 'g2',
   },
   {
@@ -24,6 +64,26 @@ export const mockPlaces = [
     image: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800',
     description: "Randonnée à travers des gorges turquoise et des piscines naturelles. Un joyau caché de Taroudant.",
     tags: ['randonnée', 'piscine naturelle', 'aventure'],
+    homestay: {
+      house: 'Eco-lodge familial en bord d oued',
+      houseImages: [
+        'https://images.unsplash.com/photo-1449844908441-8829872d2607?w=800',
+        'https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=800',
+        'https://images.unsplash.com/photo-1507089947368-19c1da9775ae?w=800',
+      ],
+      meals: ['Petit dej berbere', 'Tajine legumes', 'Gateau amande'],
+      mealsImages: [
+        'https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800',
+        'https://images.unsplash.com/photo-1466978913421-dad2ebd01d17?w=800',
+        'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800',
+      ],
+      activities: ['Baignade naturelle', 'Rando guidee', 'Atelier poterie'],
+      activitiesImages: [
+        'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800',
+        'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800',
+        'https://images.unsplash.com/photo-1489515217757-5fd1be406fef?w=800',
+      ],
+    },
     guideId: 'g1',
   },
   {
@@ -33,6 +93,26 @@ export const mockPlaces = [
     image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800',
     description: "Découvrez la production artisanale de l'huile d'argan par les femmes de la coopérative.",
     tags: ['gastronomie', 'argan', 'artisanat'],
+    homestay: {
+      house: 'Maison d hotes argan avec jardin',
+      houseImages: [
+        'https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=800',
+        'https://images.unsplash.com/photo-1507089947368-19c1da9775ae?w=800',
+        'https://images.unsplash.com/photo-1449844908441-8829872d2607?w=800',
+      ],
+      meals: ['Amlou maison', 'Tajine poisson', 'The a la menthe'],
+      mealsImages: [
+        'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800',
+        'https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800',
+        'https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=800',
+      ],
+      activities: ['Atelier argan', 'Cours de cuisine', 'Balade village'],
+      activitiesImages: [
+        'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800',
+        'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800',
+        'https://images.unsplash.com/photo-1489515217757-5fd1be406fef?w=800',
+      ],
+    },
     guideId: 'g2',
   },
   {
@@ -42,6 +122,26 @@ export const mockPlaces = [
     image: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800',
     description: "Ascension du point culminant de l'Anti-Atlas avec des panoramas à couper le souffle.",
     tags: ['montagne', 'randonnée', 'aventure'],
+    homestay: {
+      house: 'Gite de montagne cosy',
+      houseImages: [
+        'https://images.unsplash.com/photo-1449844908441-8829872d2607?w=800',
+        'https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=800',
+        'https://images.unsplash.com/photo-1507089947368-19c1da9775ae?w=800',
+      ],
+      meals: ['Soupe maison', 'Tajine viande', 'Pain chaud'],
+      mealsImages: [
+        'https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=800',
+        'https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800',
+        'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800',
+      ],
+      activities: ['Trek lever de soleil', 'Feu de camp', 'Observation etoiles'],
+      activitiesImages: [
+        'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=800',
+        'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800',
+        'https://images.unsplash.com/photo-1489515217757-5fd1be406fef?w=800',
+      ],
+    },
     guideId: 'g1',
   },
 ];

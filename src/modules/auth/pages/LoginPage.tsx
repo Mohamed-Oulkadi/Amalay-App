@@ -17,7 +17,7 @@ export default function LoginPage() {
     e.preventDefault();
     // Mock login
     login({ id: 't1', name: 'Voyageur', email, role: 'tourist' });
-    navigate('/');
+    navigate('/onboarding');
   };
 
   return (

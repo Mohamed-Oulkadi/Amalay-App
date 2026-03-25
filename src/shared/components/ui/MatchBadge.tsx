@@ -7,9 +7,20 @@ interface MatchBadgeProps {
 }
 
 export function MatchBadge({ score, className }: MatchBadgeProps) {
-  const color = score >= 80 ? 'bg-guide/10 text-guide' : score >= 50 ? 'bg-accent-light text-accent' : 'bg-muted text-muted-foreground';
+  const color =
+    score >= 80
+      ? 'bg-emerald-600/85 text-white border-emerald-200/40'
+      : score >= 50
+        ? 'bg-amber-500/85 text-white border-amber-200/40'
+        : 'bg-slate-900/70 text-white border-white/20';
   return (
-    <span className={cn('inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-bold', color, className)}>
+    <span
+      className={cn(
+        'inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-bold shadow-md backdrop-blur-sm',
+        color,
+        className,
+      )}
+    >
       {score}% match
     </span>
   );
